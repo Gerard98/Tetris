@@ -13,7 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Tetris");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = loader.load();
 
@@ -21,19 +21,19 @@ public class Main extends Application {
         Controller controller = loader.getController();
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             if (KeyCode.D == event.getCode() && controller.getPlayerIsPlaying()) {
-                if(controller.getFigure().getMaxX() <=180 && controller.isAvaibleToMoveD()){
+                if(controller.isAvaibleToMoveD()){
                     controller.getFigure().relocateToRight();
                 }
 
             }
             if (KeyCode.A == event.getCode() && controller.getPlayerIsPlaying()) {
-                if(controller.getFigure().getMinX() >= 25 && controller.isAvaibleToMoveA()){
+                if(controller.isAvaibleToMoveA()){
                     controller.getFigure().relocateToLeft();
                 }
 
             }
             if(KeyCode.S == event.getCode() && controller.getPlayerIsPlaying()){
-                //if(controller.getRectangle().getLayoutY() <= 420)
+                //if(controller.getFigure().getLayoutY() <= 420)
                     //controller.getRectangle().setLayoutY(controller.getRectangle().getLayoutY() + 30);
             }
             if(KeyCode.W == event.getCode() && controller.getPlayerIsPlaying()){
@@ -42,7 +42,7 @@ public class Main extends Application {
         });
 
 
-        Scene scene = new Scene(root,800,800);
+        Scene scene = new Scene(root,340,800);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -2,6 +2,7 @@ package sample.Figure;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import sample.RandomColor;
 
@@ -31,19 +32,20 @@ public class InvertedLShapeFigure extends Figure{
     private int position = 0;
 
     public InvertedLShapeFigure(){
-        Color color = RandomColor.getRandomColor();
+        ImagePattern img = RandomColor.getRandomColor();
         List<Node> listOfRectangles = new LinkedList<>();
         for(int i=0;i<3;i++){
-            Rectangle rectangle = new Rectangle(30,30,color);
+            Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX(60+30*i);
             rectangle.setLayoutY(30);
             listOfRectangles.add(rectangle);
         }
 
-        Rectangle rectangle = new Rectangle(30,30,color);
+        Rectangle rectangle = new Rectangle(30,30,img);
         rectangle.setLayoutX(60.0);
         rectangle.setLayoutY(0);
         listOfRectangles.add(rectangle);
+
 
         setListOfRectangles(listOfRectangles);
     }
@@ -116,9 +118,9 @@ public class InvertedLShapeFigure extends Figure{
                 x2 = node2.getLayoutX();
                 y2 = node2.getLayoutY();
 
-                if(checkGameBoardToRotate(x1+30,y1-30,x2+60,y2-30,gameBoard)) {
+                if(checkGameBoardToRotate(x1+30,y1-30,x2+90,y2-30,gameBoard)) {
                     node.relocate(x1+30,y1-30);
-                    node2.relocate(x2+60,y2-30);
+                    node2.relocate(x2+90,y2-30);
                     position = 0;
                 }
 

@@ -2,6 +2,7 @@ package sample.Figure;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import sample.RandomColor;
 
@@ -31,16 +32,16 @@ public class TShapeFigure extends Figure {
     private int position = 0;
 
     public TShapeFigure(){
-        Color color = RandomColor.getRandomColor();
+        ImagePattern img = RandomColor.getRandomColor();
         List<Node> listOfRectangles = new LinkedList<>();
         for(int i=0;i<3;i++){
-            Rectangle rectangle = new Rectangle(30,30,color);
+            Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX(60+30*i);
             rectangle.setLayoutY(30);
             listOfRectangles.add(rectangle);
         }
 
-        Rectangle rectangle = new Rectangle(30,30,color);
+        Rectangle rectangle = new Rectangle(30,30,img);
         rectangle.setLayoutX(90.0);
         rectangle.setLayoutY(0);
         listOfRectangles.add(rectangle);

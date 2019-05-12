@@ -1,4 +1,6 @@
 
-.rectangleBorder{
-    border: 1px black;
+.color1{
+    -fx-border-width: 1px;
+    -fx-border-color: blue;
+    -fx-background-image: url('../Images/1.png');
 }

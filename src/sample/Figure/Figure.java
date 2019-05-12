@@ -108,13 +108,11 @@ public class Figure {
 
     public double getMaxY(){
         Node node = listOfRectangles.stream().max(Comparator.comparing(Node::getLayoutY)).get();
-        System.out.println("Max Y: "+node.getLayoutY());
         return node.getLayoutY();
     }
 
     public double getMinY(){
         Node node = listOfRectangles.stream().min(Comparator.comparing(Node::getLayoutY)).get();
-        System.out.println("Min Y: "+node.getLayoutY());
         return node.getLayoutY();
     }
 

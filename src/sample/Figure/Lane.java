@@ -2,6 +2,7 @@ package sample.Figure;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import sample.RandomColor;
 
@@ -15,11 +16,11 @@ public class Lane extends Figure {
     private Node forRotate;
 
     public Lane(){
-        Color color = RandomColor.getRandomColor();
+        ImagePattern img = RandomColor.getRandomColor();
         List<Node> listOfRectangles = new LinkedList<>();
         for(int i=0;i<4;i++){
 
-            Rectangle rectangle = new Rectangle(30,30,color);
+            Rectangle rectangle = new Rectangle(30,30,img);
             //rectangle.setStyle("-fx-stroke: black; -fx-stroke-width: 1px");
             rectangle.setLayoutX((i+1)*30); // i = 0   i =1  i = 2
             rectangle.setLayoutY(0);   // X = 5 Y = 0 X =6 Y = 1

@@ -6,13 +6,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 import sample.Figure.*;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -22,18 +25,24 @@ public class Controller {
     private Boolean playerIsPlaying;
     private int gameBoard[][];
     private boolean stop = false;
+    private int points = 0;
+    private int lanesDeleted = 0;
 
     @FXML
     private Pane pane, gamePane;
     private Timeline timeline;
 
     @FXML
-    public void initialize(){
+    private Label pointsLabel, lanesLabel;
 
+    @FXML
+    public void initialize(){
+        gamePane.setStyle("-fx-background-color: black;");
         gameBoard = new int[17][8];
 
         playerIsPlaying = true;
         gamePane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        refreshLabels();
         newFigure();
         newTimeline();
 
@@ -42,6 +51,11 @@ public class Controller {
     @FXML
     public void reset(){
         deleteFill();
+        for(int i=0;i<17;i++){
+            Arrays.fill(gameBoard[i],0);
+        }
+        newFigure();
+        newTimeline();
     }
 
     public void deleteFill(){
@@ -67,23 +81,8 @@ public class Controller {
 
     public void newFigure(){
 
-        gameBoardToString();
         Random random = new Random();
         Figure figure = RandomFigure.getRandomFigure();
-        /*
-        int i = random.nextInt(2);
-        switch (i){
-            case 0:
-                figure = new Square();
-                break;
-            case 1:
-                figure = new Lane();
-                break;
-            default:
-                figure = new Square();
-                break;
-        }
-        */
 
         gamePane.getChildren().addAll(figure.getListOfRectangles());
 
@@ -110,12 +109,22 @@ public class Controller {
     }
 
     public int getMinY(){
-        Node node = gamePane
-                .getChildren()
-                .stream()
-                .min(Comparator.comparing(Node::getLayoutY))
-                .get();
-        return (int) node.getLayoutY()/30;
+        try {
+            Node node = gamePane
+                    .getChildren()
+                    .stream()
+                    .min(Comparator.comparing(Node::getLayoutY))
+                    .get();
+            return (int) node.getLayoutY() / 30;
+        }
+        catch (NoSuchElementException ex){
+            return 15;
+        }
+    }
+
+    public void refreshLabels(){
+        pointsLabel.setText(Integer.toString(points));
+        lanesLabel.setText(Integer.toString(lanesDeleted));
     }
 
     public void deleteRow(int row){
@@ -129,24 +138,23 @@ public class Controller {
                 gamePane.getChildren().remove(m);
             }
         });
-
-        int loop = 15 - row;
-
-            for(int i = row; i>=getMinY();i--){
-
-                for(Node node : gamePane.getChildren()){
-                    int y = (int) node.getLayoutY()/30;
-                    int x = (int) node.getLayoutX()/30;
-                    if(y < row && y == i){
+            for (int i = row; i >= getMinY(); i--) {
+                for (Node node : gamePane.getChildren()) {
+                    int y = (int) node.getLayoutY() / 30;
+                    int x = (int) node.getLayoutX() / 30;
+                    if (y < row && y == i) {
                         gameBoard[y][x] = 0;
-                        gameBoard[y+1][x] = 1;
+                        gameBoard[y + 1][x] = 1;
                         node.setLayoutY(node.getLayoutY() + 30);
                     }
                 }
-
             }
 
-            System.out.println("Po usuwaniu");
+
+        points += 100;
+        lanesDeleted += 1;
+        refreshLabels();
+        System.out.println("Po usuwaniu");
         gameBoardToString();
     }
 
@@ -175,7 +183,7 @@ public class Controller {
 
     public void newTimeline(){
 
-        timeline = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+        timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
             double deltaY = 3;
             @Override
             public void handle(ActionEvent event) {
@@ -220,7 +228,9 @@ public class Controller {
 
     public boolean isAvaibleToMoveD(){
         int x = (int) figure.getMaxX()/30;
+
         if(figure.getMaxX() >180) return false;
+
         int minY = (int) figure.getMinY()/30 + 1;
         int maxY = (int) figure.getMaxY()/30 + 1;
 
@@ -232,9 +242,12 @@ public class Controller {
 
     public boolean isAvaibleToMoveA(){
         int x = (int) figure.getMinX()/30;
+
         if(figure.getMinX() <= 25) return false;
+
         int minY = (int) figure.getMinY()/30;
         int maxY = (int) figure.getMaxY()/30;
+
         for(int i=minY;i<=maxY;i++){
             if(gameBoard[i][x-1] == 1) return false;
         }
