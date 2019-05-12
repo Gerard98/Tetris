@@ -25,6 +25,7 @@ public class Controller {
     private Boolean playerIsPlaying;
     private int gameBoard[][];
     private boolean stop = false;
+    private int lvl = 1;
     private int points = 0;
     private int lanesDeleted = 0;
 
@@ -33,7 +34,7 @@ public class Controller {
     private Timeline timeline;
 
     @FXML
-    private Label pointsLabel, lanesLabel;
+    private Label pointsLabel, lanesLabel,lvlLabel;
 
     @FXML
     public void initialize(){
@@ -125,6 +126,7 @@ public class Controller {
     public void refreshLabels(){
         pointsLabel.setText(Integer.toString(points));
         lanesLabel.setText(Integer.toString(lanesDeleted));
+        lvlLabel.setText(Integer.toString(lvl));
     }
 
     public void deleteRow(int row){
@@ -151,8 +153,9 @@ public class Controller {
             }
 
 
-        points += 100;
+        points += 100*lvl;
         lanesDeleted += 1;
+        if(points/1000 > lvl) lvl++;
         refreshLabels();
         System.out.println("Po usuwaniu");
         gameBoardToString();
@@ -183,8 +186,8 @@ public class Controller {
 
     public void newTimeline(){
 
-        timeline = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
-            double deltaY = 3;
+        timeline = new Timeline(new KeyFrame(Duration.millis(16-lvl), new EventHandler<ActionEvent>() {
+            double deltaY = 1;
             @Override
             public void handle(ActionEvent event) {
 
@@ -209,8 +212,9 @@ public class Controller {
 
             }
         }));
+        timeline.setDelay(Duration.ONE);
         timeline.setAutoReverse(true);
-        timeline.setCycleCount(900);
+        timeline.setCycleCount(2000);
         timeline.play();
 
     }

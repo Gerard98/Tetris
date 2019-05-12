@@ -25,22 +25,12 @@ public class Figure {
         });
     }
 
-    public boolean checkBottomBorder(Double[] bottomBorder){
-
-        return listOfRectangles.stream().anyMatch(m -> {
-            if(m.getLayoutY() >= bottomBorder[(int) m.getLayoutX()/30]){
-                return true;
-            }
-            return false;
-
-        });
-    }
-
     public boolean checkBottomBorder(int[][] gameBoard){
 
         return listOfRectangles.stream().anyMatch(m -> {
             int y = (int) m.getLayoutY()/30;
             int x = (int) m.getLayoutX()/30;
+            System.out.println("X: "  +m.getLayoutX() + " Y: " +m.getLayoutY());
             if((gameBoard[y+1][x] == 1 /*&& m.getLayoutY() == getMaxY()*/) || y == 15){
                 return true;
             }
