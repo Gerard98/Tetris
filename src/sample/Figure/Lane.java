@@ -10,10 +10,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Lane extends Figure {
+    // That figure can have a 2 dirent positions
+    /*
+
+    0:  x x x x     0 1 2 3
+
+    1:  x           0
+        x           1
+        x           2
+        x           3
+
+    */
 
     private boolean isUpright = false;
-
-    private Node forRotate;
 
     public Lane(){
         ImagePattern img = RandomColor.getRandomColor();
@@ -21,9 +30,8 @@ public class Lane extends Figure {
         for(int i=0;i<4;i++){
 
             Rectangle rectangle = new Rectangle(30,30,img);
-            //rectangle.setStyle("-fx-stroke: black; -fx-stroke-width: 1px");
-            rectangle.setLayoutX((i+1)*30); // i = 0   i =1  i = 2
-            rectangle.setLayoutY(0);   // X = 5 Y = 0 X =6 Y = 1
+            rectangle.setLayoutX((i+1)*30);
+            rectangle.setLayoutY(0);
             listOfRectangles.add(rectangle);
 
         }
@@ -33,12 +41,16 @@ public class Lane extends Figure {
     }
 
     public boolean chechGameBoardToRotateByX(int[][] gameBoard, int x , int y){
-        if(x+2 >7d || x-1<0) return false;
+        if(x+2 >7d || x-1<0) {
+            return false;
+        }
         return gameBoard[y][x-1] == 0 && gameBoard[y][x+1] == 0 && gameBoard[y][x+2] == 0;
     }
 
     public boolean chechGameBoardToRotateByY(int[][] gameBoard, int x , int y){
-        if(y-2 < 0) return false;
+        if(y-2 < 0) {
+            return false;
+        }
         return gameBoard[y+1][x] == 0 && gameBoard[y-1][x] == 0 && gameBoard[y-2][x] == 0;
     }
 
@@ -71,7 +83,6 @@ public class Lane extends Figure {
                 });
                 isUpright = false;
             }
-            else System.out.println("Blokada rotacji");
         }
         else {
             int maxX = (int) getMaxX()/30;

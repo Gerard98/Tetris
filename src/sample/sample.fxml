@@ -6,16 +6,16 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <Pane fx:id="gamePane" layoutX="50.0" layoutY="250.0" prefHeight="480.0" prefWidth="240.0" />
-      <Button layoutX="281.0" layoutY="147.0" mnemonicParsing="false" onAction="#reset" text="Reset" />
-      <Button layoutX="232.0" layoutY="147.0" mnemonicParsing="false" onAction="#stop" text="Stop" />
+      <Pane fx:id="gamePane" layoutX="50.0" layoutY="250.0" prefHeight="600.0" prefWidth="300.0" />
+      <Button layoutX="305.0" layoutY="126.0" mnemonicParsing="false" onAction="#reset" text="Reset" />
+      <Button layoutX="307.0" layoutY="160.0" mnemonicParsing="false" onAction="#stop" text="Stop" />
       <Label layoutX="14.0" layoutY="130.0" text="Points:" />
       <Label fx:id="pointsLabel" layoutX="99.0" layoutY="130.0" text="Label" />
       <Label layoutX="14.0" layoutY="151.0" text="Lanes Deleted:" />
       <Label fx:id="lanesLabel" layoutX="99.0" layoutY="151.0" text="Label" />
-      <ImageView fitHeight="100.0" fitWidth="340.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="100.0" fitWidth="340.0" layoutX="30.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="file:/C:/Users/wiedy/IdeaProjects/Tetris%20kurwa/src/sample/Images/logo.png" />
          </image></ImageView>

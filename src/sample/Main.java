@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.animation.Animation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,20 +20,22 @@ public class Main extends Application {
         Controller controller = loader.getController();
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             if (KeyCode.D == event.getCode() && controller.getPlayerIsPlaying()) {
-                if(controller.isAvaibleToMoveD()){
+                if(controller.isAvailableToMoveD()){
                     controller.getFigure().relocateToRight();
                 }
 
             }
             if (KeyCode.A == event.getCode() && controller.getPlayerIsPlaying()) {
-                if(controller.isAvaibleToMoveA()){
+                if(controller.isAvailableToMoveA()){
                     controller.getFigure().relocateToLeft();
                 }
 
             }
             if(KeyCode.S == event.getCode() && controller.getPlayerIsPlaying()){
-                if(controller.getFigure().getMaxY() <= 420)
+                if(controller.getFigure().getMaxY() <= 570){
                     controller.userUseS();
+                }
+
             }
             if(KeyCode.W == event.getCode() && controller.getPlayerIsPlaying()){
                 controller.getFigure().rotateFigure(controller.getGameBoard());
@@ -42,7 +43,7 @@ public class Main extends Application {
         });
 
 
-        Scene scene = new Scene(root,340,800);
+        Scene scene = new Scene(root,400,900);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

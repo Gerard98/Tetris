@@ -27,6 +27,10 @@ public class Controller {
     private int points = 0;
     private int lanesDeleted = 0;
 
+    private final int GAME_BOARD_WIDTH = 10;
+    private final int GAME_BOARD_HEIGHT = 20;
+
+
     @FXML
     private Pane gamePane;
     private Timeline timeline;
@@ -37,7 +41,7 @@ public class Controller {
     @FXML
     public void initialize(){
         gamePane.setStyle("-fx-background-color: black;");
-        gameBoard = new int[17][8];
+        gameBoard = new int[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
 
         playerIsPlaying = true;
         gamePane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
@@ -49,12 +53,20 @@ public class Controller {
 
     @FXML
     public void reset(){
+        timeline.stop();
         deleteFill();
-        for(int i=0;i<17;i++){
+        for(int i=0;i<GAME_BOARD_HEIGHT;i++){
             Arrays.fill(gameBoard[i],0);
         }
+        lvl = 1;
+        points = 0;
+        lanesDeleted = 0;
+        refreshLabels();
+        playerIsPlaying = true;
         newFigure();
         newTimeline();
+
+
     }
 
     public void deleteFill(){
@@ -91,19 +103,13 @@ public class Controller {
     // Deleting Row
 
     public void gameBoardToString(){
-        for(int i=6;i<17;i++){
-            for(int j=0;j<8;j++){
+        for(int i=6;i<20;i++){
+            for(int j=0;j<10;j++){
                 System.out.print(gameBoard[i][j] + " ");
             }
             System.out.println();
         }
         System.out.println();
-    }
-
-    public void showY(){
-        gamePane.getChildren().forEach(m -> {
-            System.out.println(m.getLayoutY());
-        });
     }
 
     public int getMinY(){
@@ -116,11 +122,14 @@ public class Controller {
             return (int) node.getLayoutY() / 30;
         }
         catch (NoSuchElementException ex){
-            return 15;
+            return GAME_BOARD_HEIGHT;
         }
     }
 
     public void refreshLabels(){
+        if(points/100 > lvl && lvl < 11) {
+            lvl++;
+        }
         pointsLabel.setText(Integer.toString(points));
         lanesLabel.setText(Integer.toString(lanesDeleted));
         lvlLabel.setText(Integer.toString(lvl));
@@ -152,7 +161,6 @@ public class Controller {
 
         points += 100*lvl;
         lanesDeleted += 1;
-        if(points/1000 > lvl) lvl++;
         refreshLabels();
         System.out.println("Po usuwaniu");
         gameBoardToString();
@@ -160,8 +168,8 @@ public class Controller {
 
     public void checkForDeleteRow(){
         boolean rowDeleted = false;
-        for(int i=1;i<16;i++){
-            for(int j=0;j<8;j++){
+        for(int i=1;i<GAME_BOARD_HEIGHT;i++){
+            for(int j=0;j<GAME_BOARD_WIDTH;j++){
                 if(gameBoard[i][j] == 0){
                     break;
                 }
@@ -183,54 +191,47 @@ public class Controller {
 
     public void newTimeline(){
 
-        timeline = new Timeline(new KeyFrame(Duration.millis(16-lvl), new EventHandler<ActionEvent>() {
-            double deltaY = 1;
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(550-lvl*50));
+
+        timeline = new Timeline(new KeyFrame(Duration.millis(550-lvl*50), new EventHandler<ActionEvent>() {
+            double deltaY = 30;
             @Override
             public void handle(ActionEvent event) {
 
                 figure.setLayoutY(deltaY);
 
                 if(figure.checkBottomBorder(gameBoard)){
+                    figure.getListOfRectangles().forEach(m -> {
+                        System.out.println("X: "+m.getLayoutX()+" Y: " +m.getLayoutY() + " // X: " + (int) m.getLayoutY()/30 + " Y: " + (int) m.getLayoutX()/30);
+
+                    });
                     if(figure.getMinY() <= 29){
                         endGame();
                         timeline.stop();
                     }
                     else {
                         gameBoard = figure.changeGameBoard(gameBoard);
-                        //gameBoardToString();
                         checkForDeleteRow();
                         newFigure();
-
                         timeline.playFromStart();
                     }
                 }
-
-
 
             }
         }));
         timeline.setDelay(Duration.ONE);
         timeline.setAutoReverse(true);
-        timeline.setCycleCount(2000);
+        timeline.setCycleCount(40);
         timeline.play();
 
     }
 
     // Rest
 
-    public Double getSpecificBottomBorder(int j){
-        for(int i=0;i<=15;i++){
-            if(gameBoard[i][j] == 1){
-                return i*30D;
-            }
-        }
-        return 450.0;
-    }
-
-    public boolean isAvaibleToMoveD(){
+    public boolean isAvailableToMoveD(){
         int x = (int) figure.getMaxX()/30;
 
-        if(figure.getMaxX() >180) return false;
+        if(figure.getMaxX() >= GAME_BOARD_WIDTH*30 - 30) return false;
 
         int minY = (int) figure.getMinY()/30 + 1;
         int maxY = (int) figure.getMaxY()/30 + 1;
@@ -241,13 +242,13 @@ public class Controller {
         return true;
     }
 
-    public boolean isAvaibleToMoveA(){
+    public boolean isAvailableToMoveA(){
         int x = (int) figure.getMinX()/30;
 
         if(figure.getMinX() <= 25) return false;
 
-        int minY = (int) figure.getMinY()/30;
-        int maxY = (int) figure.getMaxY()/30;
+        int minY = (int) figure.getMinY()/30 + 1;
+        int maxY = (int) figure.getMaxY()/30 + 1;
 
         for(int i=minY;i<=maxY;i++){
             if(gameBoard[i][x-1] == 1) return false;
@@ -257,10 +258,12 @@ public class Controller {
 
     public void userUseS(){
         if(isSAvailable()){
+            points+=5;
+            refreshLabels();
             figure.setLayoutY(30);
         }
     }
-    
+
 
     public boolean isSAvailable(){
 
@@ -269,8 +272,10 @@ public class Controller {
                 .allMatch(m -> {
                     int x =(int) m.getLayoutX()/30;
                     int y = (int) m.getLayoutY()/30;
-
-                    if(gameBoard[y+2][x] == 1){
+                    if(y == GAME_BOARD_HEIGHT -2 || y == GAME_BOARD_HEIGHT - 1){
+                        return false;
+                    }
+                    else if(gameBoard[y+2][x] == 1){
                         return false;
                     }
                     return true;

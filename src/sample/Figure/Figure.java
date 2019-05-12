@@ -9,6 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Figure {
 
+    private final int GAME_BOARD_WIDTH = 10;
+    private final int GAME_BOARD_HEIGHT = 20;
+
     private List<Node> listOfRectangles;
 
     public List<Node> getListOfRectangles() {
@@ -30,10 +33,13 @@ public class Figure {
         return listOfRectangles.stream().anyMatch(m -> {
             int y = (int) m.getLayoutY()/30;
             int x = (int) m.getLayoutX()/30;
-            System.out.println("X: "  +m.getLayoutX() + " Y: " +m.getLayoutY());
-            if(gameBoard[y+1][x] == 1 || y == 15){
+            if (y == GAME_BOARD_HEIGHT-1) {
+                return true;
+            } else if (gameBoard[y + 1][x] == 1) {
                 return true;
             }
+
+
             return false;
         });
     }
@@ -47,7 +53,6 @@ public class Figure {
         localGameBoard = gameBoard;
         while(it.hasNext()){
             Node n = it.next();
-            //System.out.println("X: " + n.getLayoutX()/30 + " Y: " +n.getLayoutY()/30);
             int x = (int) n.getLayoutX()/30;
             int y = (int) n.getLayoutY()/30;
 
@@ -75,25 +80,6 @@ public class Figure {
 
     public void rotateFigure(int[][] gameBoard){
 
-    }
-
-    public Node getNodeWithMinX(){
-        return listOfRectangles.stream()
-                .min(Comparator.comparing(Node::getLayoutX))
-                .get();
-    }
-
-    public Node getNodeWithMinY(){
-        return listOfRectangles.stream()
-                .min(Comparator.comparing(Node::getLayoutY))
-                .get();
-    }
-
-
-    public Node getNodeWithMaxY(){
-        return listOfRectangles.stream()
-                .max(Comparator.comparing(Node::getLayoutY))
-                .get();
     }
 
     public double getMaxY(){
@@ -135,7 +121,7 @@ public class Figure {
         int newX2 = (int) x2/30;
         int newY2 = (int) y2/30;
 
-        if(newX1 > -1 && newX1 < 8 && newX2 > -1 && newX2 < 8  && newY1 < 16 && newY2 < 16){
+        if(newX1 > -1 && newX1 < GAME_BOARD_WIDTH && newX2 > -1 && newX2 < GAME_BOARD_WIDTH  && newY1 < GAME_BOARD_HEIGHT && newY2 < GAME_BOARD_HEIGHT){
             return gameBoard[newY1][newX1] == 0 && gameBoard[newY2][newX2] == 0;
         }
         return false;
@@ -144,7 +130,7 @@ public class Figure {
     public boolean checkGameBoardToRotate(double x1, double y1, int[][] gameBoard){
         int newX1 = (int) x1/30;
         int newY1 = (int) y1/30;
-        if(newX1 > -1 && newX1 < 8 && newY1 < 16){
+        if(newX1 > -1 && newX1 < GAME_BOARD_WIDTH && newY1 < GAME_BOARD_HEIGHT){
             return gameBoard[newY1][newX1] == 0;
         }
         return false;
