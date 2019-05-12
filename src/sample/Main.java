@@ -33,8 +33,8 @@ public class Main extends Application {
 
             }
             if(KeyCode.S == event.getCode() && controller.getPlayerIsPlaying()){
-                //if(controller.getFigure().getLayoutY() <= 420)
-                    //controller.getRectangle().setLayoutY(controller.getRectangle().getLayoutY() + 30);
+                if(controller.getFigure().getMaxY() <= 420)
+                    controller.userUseS();
             }
             if(KeyCode.W == event.getCode() && controller.getPlayerIsPlaying()){
                 controller.getFigure().rotateFigure(controller.getGameBoard());

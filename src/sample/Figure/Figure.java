@@ -31,7 +31,7 @@ public class Figure {
             int y = (int) m.getLayoutY()/30;
             int x = (int) m.getLayoutX()/30;
             System.out.println("X: "  +m.getLayoutX() + " Y: " +m.getLayoutY());
-            if((gameBoard[y+1][x] == 1 /*&& m.getLayoutY() == getMaxY()*/) || y == 15){
+            if(gameBoard[y+1][x] == 1 || y == 15){
                 return true;
             }
             return false;
@@ -149,6 +149,7 @@ public class Figure {
         }
         return false;
     }
+
 
 
 }

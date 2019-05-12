@@ -9,28 +9,26 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import javafx.util.Duration;
 import sample.Figure.*;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Controller {
 
     private Figure figure;
     private Boolean playerIsPlaying;
-    private int gameBoard[][];
+    private int[][] gameBoard;
     private boolean stop = false;
     private int lvl = 1;
     private int points = 0;
     private int lanesDeleted = 0;
 
     @FXML
-    private Pane pane, gamePane;
+    private Pane gamePane;
     private Timeline timeline;
 
     @FXML
@@ -82,7 +80,6 @@ public class Controller {
 
     public void newFigure(){
 
-        Random random = new Random();
         Figure figure = RandomFigure.getRandomFigure();
 
         gamePane.getChildren().addAll(figure.getListOfRectangles());
@@ -258,7 +255,27 @@ public class Controller {
         return true;
     }
 
+    public void userUseS(){
+        if(isSAvailable()){
+            figure.setLayoutY(30);
+        }
+    }
+    
 
+    public boolean isSAvailable(){
+
+        return getFigure().getListOfRectangles()
+                .stream()
+                .allMatch(m -> {
+                    int x =(int) m.getLayoutX()/30;
+                    int y = (int) m.getLayoutY()/30;
+
+                    if(gameBoard[y+2][x] == 1){
+                        return false;
+                    }
+                    return true;
+        });
+    }
 
     public Boolean getPlayerIsPlaying(){
         return playerIsPlaying;
