@@ -127,7 +127,7 @@ public class Controller {
     }
 
     public void refreshLabels(){
-        if(points/100 > lvl && lvl < 11) {
+        if(points/1000 > lvl && lvl < 10) {
             lvl++;
         }
         pointsLabel.setText(Integer.toString(points));
@@ -191,8 +191,6 @@ public class Controller {
 
     public void newTimeline(){
 
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(550-lvl*50));
-
         timeline = new Timeline(new KeyFrame(Duration.millis(550-lvl*50), new EventHandler<ActionEvent>() {
             double deltaY = 30;
             @Override
@@ -213,7 +211,9 @@ public class Controller {
                         gameBoard = figure.changeGameBoard(gameBoard);
                         checkForDeleteRow();
                         newFigure();
-                        timeline.playFromStart();
+                        timeline.stop();
+                        newTimeline();
+                        //timeline.playFromStart();
                     }
                 }
 
