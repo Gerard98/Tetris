@@ -33,6 +33,9 @@ public class Figure {
         return listOfRectangles.stream().anyMatch(m -> {
             int y = (int) m.getLayoutY()/30;
             int x = (int) m.getLayoutX()/30;
+            if(y < 0){
+                return false;
+            }
             if (y == GAME_BOARD_HEIGHT-1) {
                 return true;
             } else if (gameBoard[y + 1][x] == 1) {
@@ -134,6 +137,55 @@ public class Figure {
             return gameBoard[newY1][newX1] == 0;
         }
         return false;
+    }
+
+    // Moving
+
+    public boolean isAvailableToMoveD(int[][] gameBoard){
+
+        if(getMaxX() >= GAME_BOARD_WIDTH*30 - 30) return false;
+
+        return listOfRectangles
+                .stream()
+                .allMatch(m -> checkRightPosition(gameBoard,m));
+    }
+
+    public boolean isAvailableToMoveA(int[][] gameBoard){
+
+        if(getMinX() <= 25) return false;
+
+        return listOfRectangles
+                .stream()
+                .allMatch(m -> checkLeftPosition(gameBoard,m));
+    }
+
+    public boolean isAvailableToMoveS(int[][] gameBoard){
+
+        System.out.println(getMinY());
+        if(getMinY() >= 540 || getMinY() <= 0) return false;
+
+        return listOfRectangles
+                .stream()
+                .allMatch(m -> checkDownPosition(gameBoard, m));
+
+    }
+
+    public boolean checkLeftPosition(int [][] gameBoard, Node node){
+        int x = (int) node.getLayoutX() / 30;
+        int y = (int) node.getLayoutY() / 30;
+        return gameBoard[y][x-1] == 0;
+    }
+
+    public boolean checkRightPosition(int [][] gameBoard, Node node){
+        int x = (int) node.getLayoutX() / 30;
+        int y = (int) node.getLayoutY() / 30;
+        return gameBoard[y][x+1] == 0;
+    }
+
+    public boolean checkDownPosition(int[][] gameBoard, Node node){
+        int x = (int) node.getLayoutX() / 30;
+        int y = (int) node.getLayoutY() / 30;
+        return gameBoard[y+1][x] == 0;
     }
 
 

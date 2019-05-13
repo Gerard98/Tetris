@@ -49,62 +49,46 @@ public class LShapeFigure extends Figure {
         setListOfRectangles(listOfRectangles);
     }
 
-    public boolean checkGameBoardToRotate(double x1, double y1, double x2, double y2, int[][] gameBoard){
-        int newX1 = (int) x1/30;
-        int newY1 = (int) y1/30;
-
-        int newX2 = (int) x2/30;
-        int newY2 = (int) y2/30;
-
-        if(newX1 > -1 && newX1 < 8 && newX2 > -1 && newX2 < 8  && newY1 < 16 && newY2 < 16){
-            return gameBoard[newY1][newX1] == 0 && gameBoard[newY2][newX2] == 0 || newX1 < 0;
-        }
-         return false;
-    }
-
     @Override
     public void rotateFigure(int[][] gameBoard) {
-        Node node;
-        Node node2;
+        Node node = getListOfRectangles().get(3);
+        Node node2 = getListOfRectangles().get(0);
+        int x1 = (int) node.getLayoutX();
+        int y1 = (int) node.getLayoutY();
+
+        int x2 = (int) node2.getLayoutX();
+        int y2 = (int) node2.getLayoutY();
         switch (position){
             case 0:
-
-                node = getListOfRectangles().get(3);
-                node2 = getListOfRectangles().get(0);
-                if(checkGameBoardToRotate(node.getLayoutX()-30,node.getLayoutY()-30,node2.getLayoutX()+30, node2.getLayoutY()-30, gameBoard)) {
-                    node.relocate(node.getLayoutX() - 30, node.getLayoutY() - 30);
-                    node2.relocate(node2.getLayoutX() + 30, node2.getLayoutY() - 30);
+                if(checkGameBoardToRotate(x1-30,y1-30,x2+30, y2-30, gameBoard)) {
+                    node.relocate(x1 - 30, y1 - 30);
+                    node2.relocate(x2 + 30, y2 - 30);
                     position = 1;
                 }
 
                 break;
             case 1:
-                node = getListOfRectangles().get(3);
-                node2 = getListOfRectangles().get(0);
-                if(checkGameBoardToRotate(node.getLayoutX()+60,node.getLayoutY()+60,node2.getLayoutX(), node2.getLayoutY()+60, gameBoard)) {
-                    node.relocate(node.getLayoutX() + 60, node.getLayoutY() + 60);
-                    node2.relocate(node2.getLayoutX(), node2.getLayoutY() + 60);
+                if(checkGameBoardToRotate(x1+60,y1+60,x2, y2+60, gameBoard)) {
+                    node.relocate(x1 + 60, y1 + 60);
+                    node2.relocate(x2, y2 + 60);
                     position = 2;
                 }
 
                 break;
             case 2:
-                node = getListOfRectangles().get(3);
-                node2 = getListOfRectangles().get(0);
 
-                if(checkGameBoardToRotate(node.getLayoutX()-30,node.getLayoutY()+30,node2.getLayoutX() + 30, node2.getLayoutY()+30, gameBoard)) {
-                    node.relocate(node.getLayoutX() - 30, node.getLayoutY() + 30);
-                    node2.relocate(node2.getLayoutX() + 30, node2.getLayoutY() + 30);
+                if(checkGameBoardToRotate(x1-30,y1+30,x2+30, y2+30, gameBoard)) {
+                    node.relocate(x1 - 30, y1 + 30);
+                    node2.relocate(x2 + 30, y2 + 30);
                     position = 3;
                 }
 
                 break;
             case 3:
-                node = getListOfRectangles().get(3);
-                node2 = getListOfRectangles().get(0);
-                if(checkGameBoardToRotate(node.getLayoutX(),node.getLayoutY()-60,node2.getLayoutX() - 60, node2.getLayoutY()-60, gameBoard)) {
-                    node.relocate(node.getLayoutX(), node.getLayoutY() - 60);
-                    node2.relocate(node2.getLayoutX() - 60, node2.getLayoutY() - 60);
+
+                if(checkGameBoardToRotate(x1,y1-60,x2-60, y2-60, gameBoard)) {
+                    node.relocate(x1, y1 - 60);
+                    node2.relocate(x2 - 60, y2 - 60);
                     position = 0;
                 }
                 break;

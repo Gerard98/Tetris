@@ -28,7 +28,7 @@ public class Controller {
     private int lanesDeleted = 0;
 
     private final int GAME_BOARD_WIDTH = 10;
-    private final int GAME_BOARD_HEIGHT = 20;
+    private final int GAME_BOARD_HEIGHT = 22;
 
 
     @FXML
@@ -92,7 +92,8 @@ public class Controller {
 
     public void newFigure(){
 
-        Figure figure = RandomFigure.getRandomFigure();
+        //Figure figure = RandomFigure.getRandomFigure();
+        Figure figure = new InvertedLShapeFigure();
 
         gamePane.getChildren().addAll(figure.getListOfRectangles());
 
@@ -196,14 +197,12 @@ public class Controller {
             @Override
             public void handle(ActionEvent event) {
 
-                figure.setLayoutY(deltaY);
-
                 if(figure.checkBottomBorder(gameBoard)){
                     figure.getListOfRectangles().forEach(m -> {
                         System.out.println("X: "+m.getLayoutX()+" Y: " +m.getLayoutY() + " // X: " + (int) m.getLayoutY()/30 + " Y: " + (int) m.getLayoutX()/30);
 
                     });
-                    if(figure.getMinY() <= 29){
+                    if(figure.getMinY() <= 30){
                         endGame();
                         timeline.stop();
                     }
@@ -217,6 +216,14 @@ public class Controller {
                     }
                 }
 
+                if(figure.getMinY()<=0){
+                    figure.getListOfRectangles().forEach(m -> {
+                        System.out.println(m.getLayoutY());
+                        if(m.getLayoutY() >= -30) m.setVisible(true);
+                    });
+                }
+                figure.setLayoutY(deltaY);
+
             }
         }));
         timeline.setDelay(Duration.ONE);
@@ -228,44 +235,29 @@ public class Controller {
 
     // Rest
 
-    public boolean isAvailableToMoveD(){
-        int x = (int) figure.getMaxX()/30;
 
-        if(figure.getMaxX() >= GAME_BOARD_WIDTH*30 - 30) return false;
-
-        int minY = (int) figure.getMinY()/30 + 1;
-        int maxY = (int) figure.getMaxY()/30 + 1;
-
-        for(int i=minY;i<=maxY;i++){
-            if(gameBoard[i][x+1] == 1) return false;
+    public void userUseA(){
+        if(figure.isAvailableToMoveA(gameBoard)){
+            figure.relocateToLeft();
         }
-        return true;
     }
 
-    public boolean isAvailableToMoveA(){
-        int x = (int) figure.getMinX()/30;
-
-        if(figure.getMinX() <= 25) return false;
-
-        int minY = (int) figure.getMinY()/30 + 1;
-        int maxY = (int) figure.getMaxY()/30 + 1;
-
-        for(int i=minY;i<=maxY;i++){
-            if(gameBoard[i][x-1] == 1) return false;
+    public void userUseD(){
+        if(figure.isAvailableToMoveD(gameBoard)){
+            figure.relocateToRight();
         }
-        return true;
     }
 
     public void userUseS(){
-        if(isSAvailable()){
-            points+=5;
+        if(figure.isAvailableToMoveS(gameBoard)){
+            points+=1;
             refreshLabels();
             figure.setLayoutY(30);
         }
     }
 
 
-    public boolean isSAvailable(){
+    public boolean isAvailableToMoveS(){
 
         return getFigure().getListOfRectangles()
                 .stream()

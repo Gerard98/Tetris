@@ -1,7 +1,6 @@
 package sample.Figure;
 
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import sample.RandomColor;
@@ -37,13 +36,15 @@ public class InvertedLShapeFigure extends Figure{
         for(int i=0;i<3;i++){
             Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX(60+30*i);
-            rectangle.setLayoutY(30);
+            rectangle.setLayoutY(-30);
+            rectangle.setVisible(false);
             listOfRectangles.add(rectangle);
         }
 
         Rectangle rectangle = new Rectangle(30,30,img);
         rectangle.setLayoutX(60.0);
-        rectangle.setLayoutY(0);
+        rectangle.setLayoutY(-60);
+        rectangle.setVisible(false);
         listOfRectangles.add(rectangle);
 
 
@@ -53,14 +54,12 @@ public class InvertedLShapeFigure extends Figure{
 
     @Override
     public void rotateFigure(int[][] gameBoard) {
-        Node node;
-        Node node2;
+        Node node = getListOfRectangles().get(1);
+        Node node2 = getListOfRectangles().get(2);
         double x1,x2,y1,y2;
         switch (position){
             case 0:
 
-                node = getListOfRectangles().get(1);
-                node2 = getListOfRectangles().get(2);
                 x1 = node.getLayoutX();
                 y1 = node.getLayoutY();
 
@@ -74,8 +73,6 @@ public class InvertedLShapeFigure extends Figure{
                 }
                 break;
             case 1:
-                node = getListOfRectangles().get(1);
-                node2 = getListOfRectangles().get(2);
 
                 x1 = node.getLayoutX();
                 y1 = node.getLayoutY();
@@ -91,8 +88,6 @@ public class InvertedLShapeFigure extends Figure{
 
                 break;
             case 2:
-                node = getListOfRectangles().get(1);
-                node2 = getListOfRectangles().get(2);
 
                 x1 = node.getLayoutX();
                 y1 = node.getLayoutY();
@@ -109,8 +104,6 @@ public class InvertedLShapeFigure extends Figure{
                 break;
 
             case 3:
-                node = getListOfRectangles().get(1);
-                node2 = getListOfRectangles().get(2);
 
                 x1 = node.getLayoutX();
                 y1 = node.getLayoutY();

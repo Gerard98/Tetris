@@ -20,16 +20,10 @@ public class Main extends Application {
         Controller controller = loader.getController();
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             if (KeyCode.D == event.getCode() && controller.getPlayerIsPlaying()) {
-                if(controller.isAvailableToMoveD()){
-                    controller.getFigure().relocateToRight();
-                }
-
+                controller.userUseD();
             }
             if (KeyCode.A == event.getCode() && controller.getPlayerIsPlaying()) {
-                if(controller.isAvailableToMoveA()){
-                    controller.getFigure().relocateToLeft();
-                }
-
+                controller.userUseA();
             }
             if(KeyCode.S == event.getCode() && controller.getPlayerIsPlaying()){
                 if(controller.getFigure().getMaxY() <= 570){
