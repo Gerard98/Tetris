@@ -22,7 +22,8 @@ public class Lane extends Figure {
 
     */
 
-    private boolean isUpright = false;
+
+    private int position = 0;
 
     public Lane(){
         ImagePattern img = RandomColor.getRandomColor();
@@ -32,6 +33,7 @@ public class Lane extends Figure {
             Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX((i+1)*30);
             rectangle.setLayoutY(0);
+            rectangle.setVisible(false);
             listOfRectangles.add(rectangle);
 
         }
@@ -40,75 +42,59 @@ public class Lane extends Figure {
 
     }
 
-    public boolean chechGameBoardToRotateByX(int[][] gameBoard, int x , int y){
-        if(x+2 >7d || x-1<0) {
-            return false;
-        }
-        return gameBoard[y][x-1] == 0 && gameBoard[y][x+1] == 0 && gameBoard[y][x+2] == 0;
-    }
-
-    public boolean chechGameBoardToRotateByY(int[][] gameBoard, int x , int y){
-        if(y-2 < 0) {
-            return false;
-        }
-        return gameBoard[y+1][x] == 0 && gameBoard[y-1][x] == 0 && gameBoard[y-2][x] == 0;
-    }
 
     @Override
     public void rotateFigure(int[][] gameBoard){
 
-        if(isUpright) {
-            // incoming
-            int maxY = (int) getMaxY()/30;
-            int minY = (int) getMinY()/30;
+        Node node, node2, node3;
+        double x1,y1,x2,y2,x3,y3;
+        switch (position){
+            case 0:
+                node = getListOfRectangles().get(0);
+                node2 = getListOfRectangles().get(1);
+                node3 = getListOfRectangles().get(3);
 
-            Node node = getListOfRectangles().get(1);
-            double y = node.getLayoutY();
+                x1 = node.getLayoutX();
+                y1 = node.getLayoutY();
 
-            int gameBoardX = getX(node);
-            int gameBoardY = getY(node);
+                x2 = node2.getLayoutX();
+                y2 = node2.getLayoutY();
 
-            if(chechGameBoardToRotateByX(gameBoard, gameBoardX, gameBoardY)) {
-                getListOfRectangles().forEach(m -> {
-                    int localY = getY(m);
+                x3 = node3.getLayoutX();
+                y3 = node3.getLayoutY();
 
-                    double result = y - m.getLayoutY();
-                    if (localY == maxY) {
-                        m.relocate(m.getLayoutX() + 60, m.getLayoutY() + result); // x-m.getLayoutX
-                    } else if (localY == minY) {
-                        m.relocate(m.getLayoutX() - 30, m.getLayoutY() + result);
-                    } else if (!m.equals(node)) {
-                        m.relocate(m.getLayoutX() + 30, m.getLayoutY() + result);
-                    }
-                });
-                isUpright = false;
-            }
+                if(checkGameBoardToRotate(x1+60,y1-60,x2+30,y2-30, x3-30,y3+30 ,gameBoard)) {
+                    node.relocate(x1+60, y1 - 60);
+                    node2.relocate(x2 + 30,y2 - 30);
+                    node3.relocate(x3 - 30, y3+30);
+                    position = 1;
+                }
+                break;
+            case 1:
+                node = getListOfRectangles().get(0);
+                node2 = getListOfRectangles().get(1);
+                node3 = getListOfRectangles().get(3);
+
+                x1 = node.getLayoutX();
+                y1 = node.getLayoutY();
+
+                x2 = node2.getLayoutX();
+                y2 = node2.getLayoutY();
+
+                x3 = node3.getLayoutX();
+                y3 = node3.getLayoutY();
+
+                if(checkGameBoardToRotate(x1-60,y1+60,x2-30,y2+30,x3+30,y3-30,gameBoard)) {
+                    node.relocate(x1-60,y1+60);
+                    node2.relocate(x2-30,y2+30);
+                    node3.relocate(x3+30,y3-30);
+                    position = 0;
+                }
+
+                break;
+
         }
-        else {
-            int maxX = (int) getMaxX()/30;
-            int minX = (int) getMinX()/30;
 
-            Node node = getListOfRectangles().get(1);
-            //int x = (int) node.getLayoutX();
-
-            int gameBoardX = getX(node);
-            int gameBoardY = getY(node);
-
-            if(chechGameBoardToRotateByY(gameBoard, gameBoardX, gameBoardY)) {
-                getListOfRectangles().forEach(m -> {
-                    int localX = getX(m);
-
-                    if (localX == maxX) {
-                        m.relocate(m.getLayoutX() - 60, m.getLayoutY() - 60);
-                    } else if (localX == minX) {
-                        m.relocate(m.getLayoutX() + 30, m.getLayoutY() - 30);
-                    } else if (!m.equals(node)) {
-                        m.relocate(m.getLayoutX() - 30, m.getLayoutY() + 30);
-                    }
-                });
-                isUpright = true;
-            }
-        }
     }
 
 }

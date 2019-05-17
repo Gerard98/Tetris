@@ -36,14 +36,14 @@ public class InvertedLShapeFigure extends Figure{
         for(int i=0;i<3;i++){
             Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX(60+30*i);
-            rectangle.setLayoutY(-30);
+            rectangle.setLayoutY(30);
             rectangle.setVisible(false);
             listOfRectangles.add(rectangle);
         }
 
         Rectangle rectangle = new Rectangle(30,30,img);
         rectangle.setLayoutX(60.0);
-        rectangle.setLayoutY(-60);
+        rectangle.setLayoutY(0);
         rectangle.setVisible(false);
         listOfRectangles.add(rectangle);
 

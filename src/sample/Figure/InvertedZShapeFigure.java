@@ -32,6 +32,7 @@ public class InvertedZShapeFigure extends Figure{
             Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX(90+30*i);
             rectangle.setLayoutY(0);
+            rectangle.setVisible(false);
             listOfRectangles.add(rectangle);
         }
 
@@ -39,6 +40,7 @@ public class InvertedZShapeFigure extends Figure{
             Rectangle rectangle = new Rectangle(30,30,img);
             rectangle.setLayoutX(60+30*i);
             rectangle.setLayoutY(30);
+            rectangle.setVisible(false);
             listOfRectangles.add(rectangle);
         }
 

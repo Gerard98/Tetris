@@ -26,13 +26,23 @@ public class Main extends Application {
                 controller.userUseA();
             }
             if(KeyCode.S == event.getCode() && controller.getPlayerIsPlaying()){
-                if(controller.getFigure().getMaxY() <= 570){
+                if(controller.getFigure().getMaxY() <= 570 && controller.getFigure().getMinY() >= 60){
                     controller.userUseS();
                 }
 
             }
             if(KeyCode.W == event.getCode() && controller.getPlayerIsPlaying()){
                 controller.getFigure().rotateFigure(controller.getGameBoard());
+                if(controller.getMinY() < 60){
+                    controller.getFigure().getListOfRectangles().forEach(m -> {
+                        if(m.getLayoutY()<= 30){
+                            m.setVisible(false);
+                        }
+                        else{
+                            m.setVisible(true);
+                        }
+                    });
+                }
             }
         });
 

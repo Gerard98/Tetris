@@ -6,7 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -32,7 +34,7 @@ public class Controller {
 
 
     @FXML
-    private Pane gamePane;
+    private Pane pane,gamePane;
     private Timeline timeline;
 
     @FXML
@@ -40,11 +42,14 @@ public class Controller {
 
     @FXML
     public void initialize(){
-        gamePane.setStyle("-fx-background-color: black;");
+        pane.setStyle("-fx-background-color: white;");
+        Image image = new Image("sample/Images/GamePane.png");
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        gamePane.setBackground(new Background(backgroundImage));
         gameBoard = new int[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
 
         playerIsPlaying = true;
-        gamePane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        //gamePane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         refreshLabels();
         newFigure();
         newTimeline();
@@ -76,6 +81,11 @@ public class Controller {
     public void endGame(){
         System.out.println("Koniec gry");
         playerIsPlaying = false;
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("You lose!");
+        alert.setContentText("Points: " + points +" pkt\nLvl: " + lvl + "\nLanes deleted: " + lanesDeleted);
+        alert.show();
     }
 
     @FXML
@@ -93,7 +103,7 @@ public class Controller {
     public void newFigure(){
 
         //Figure figure = RandomFigure.getRandomFigure();
-        Figure figure = new InvertedLShapeFigure();
+        Figure figure = new Lane();
 
         gamePane.getChildren().addAll(figure.getListOfRectangles());
 
@@ -104,7 +114,7 @@ public class Controller {
     // Deleting Row
 
     public void gameBoardToString(){
-        for(int i=6;i<20;i++){
+        for(int i=6;i<22;i++){
             for(int j=0;j<10;j++){
                 System.out.print(gameBoard[i][j] + " ");
             }
@@ -199,10 +209,10 @@ public class Controller {
 
                 if(figure.checkBottomBorder(gameBoard)){
                     figure.getListOfRectangles().forEach(m -> {
-                        System.out.println("X: "+m.getLayoutX()+" Y: " +m.getLayoutY() + " // X: " + (int) m.getLayoutY()/30 + " Y: " + (int) m.getLayoutX()/30);
+                        System.out.println("X: "+m.getLayoutX()+" Y: " +m.getLayoutY() + " // X: " + (int) m.getLayoutX()/30 + " Y: " + (int) m.getLayoutY()/30);
 
                     });
-                    if(figure.getMinY() <= 30){
+                    if(figure.getMinY() <= 60){
                         endGame();
                         timeline.stop();
                     }
@@ -216,13 +226,14 @@ public class Controller {
                     }
                 }
 
-                if(figure.getMinY()<=0){
+                if(figure.getMinY()<=30){
                     figure.getListOfRectangles().forEach(m -> {
-                        System.out.println(m.getLayoutY());
-                        if(m.getLayoutY() >= -30) m.setVisible(true);
+                        if(m.getLayoutY() >= 30) m.setVisible(true);
                     });
                 }
-                figure.setLayoutY(deltaY);
+                if(playerIsPlaying){
+                    figure.setLayoutY(deltaY);
+                }
 
             }
         }));

@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Figure {
 
     private final int GAME_BOARD_WIDTH = 10;
-    private final int GAME_BOARD_HEIGHT = 20;
+    private final int GAME_BOARD_HEIGHT = 22;
 
     private List<Node> listOfRectangles;
 
@@ -28,11 +28,23 @@ public class Figure {
         });
     }
 
+    public void printGameBoard(int[][] gameBoard){
+        for(int i=0;i<7;i++){
+            for(int j=0;j<GAME_BOARD_WIDTH;j++){
+                System.out.print(gameBoard[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
     public boolean checkBottomBorder(int[][] gameBoard){
 
         return listOfRectangles.stream().anyMatch(m -> {
+            printGameBoard(gameBoard);
             int y = (int) m.getLayoutY()/30;
             int x = (int) m.getLayoutX()/30;
+            System.out.println(x + " " + y);
             if(y < 0){
                 return false;
             }
@@ -73,14 +85,6 @@ public class Figure {
         localGameBoard[x][y] = 1;
     }
 
-    public int getX(Node node){
-        return (int) node.getLayoutX()/30;
-    }
-
-    public int getY(Node node){
-        return (int) node.getLayoutY()/30;
-    }
-
     public void rotateFigure(int[][] gameBoard){
 
     }
@@ -107,34 +111,49 @@ public class Figure {
 
     public void relocateToLeft(){
         listOfRectangles.forEach(m -> {
-            m.setLayoutX(m.getLayoutX()-30);
+            m.relocate(m.getLayoutX()-30, m.getLayoutY());
         });
     }
 
     public void relocateToRight(){
         listOfRectangles.forEach(m -> {
-            m.setLayoutX(m.getLayoutX()+30);
+            m.relocate(m.getLayoutX()+30, m.getLayoutY());
         });
     }
 
+    public boolean checkGameBoardToRotate(double x1, double y1, double x2, double y2, double x3, double y3, int[][] gameBoard) {
+        return checkGameBoardToRotate(x1, y1, gameBoard) && checkGameBoardToRotate(x2, y2, gameBoard) && checkGameBoardToRotate(x3,y3,gameBoard);
+    }
+
     public boolean checkGameBoardToRotate(double x1, double y1, double x2, double y2, int[][] gameBoard){
-        int newX1 = (int) x1/30;
-        int newY1 = (int) y1/30;
-
-        int newX2 = (int) x2/30;
-        int newY2 = (int) y2/30;
-
-        if(newX1 > -1 && newX1 < GAME_BOARD_WIDTH && newX2 > -1 && newX2 < GAME_BOARD_WIDTH  && newY1 < GAME_BOARD_HEIGHT && newY2 < GAME_BOARD_HEIGHT){
-            return gameBoard[newY1][newX1] == 0 && gameBoard[newY2][newX2] == 0;
-        }
-        return false;
+        return checkGameBoardToRotate(x1, y1, gameBoard) && checkGameBoardToRotate(x2,y2, gameBoard);
     }
 
     public boolean checkGameBoardToRotate(double x1, double y1, int[][] gameBoard){
         int newX1 = (int) x1/30;
         int newY1 = (int) y1/30;
-        if(newX1 > -1 && newX1 < GAME_BOARD_WIDTH && newY1 < GAME_BOARD_HEIGHT){
+        if(newX1 > -1 && newX1 < GAME_BOARD_WIDTH && newY1 < GAME_BOARD_HEIGHT && newY1>-1){
             return gameBoard[newY1][newX1] == 0;
+        }
+        else{
+            if(newX1 < 0){
+                if(checkGameBoardToRotate( newX1*(-30) , newY1 ,gameBoard )){
+                    for(int i=0;i<(-1)*newX1;i++){
+                        relocateToRight();
+                    }
+                    rotateFigure(gameBoard);
+                    return false;
+                }
+            }
+            else if(newX1 >= GAME_BOARD_WIDTH-1){
+                if(checkGameBoardToRotate(newX1*30 -(newX1 - (GAME_BOARD_WIDTH-1))*30 , newY1,gameBoard )){
+                    for(int i=0;i<(newX1 - (GAME_BOARD_WIDTH-1));i++){
+                        relocateToLeft();
+                    }
+                    rotateFigure(gameBoard);
+                    return false;
+                }
+            }
         }
         return false;
     }
@@ -162,7 +181,7 @@ public class Figure {
     public boolean isAvailableToMoveS(int[][] gameBoard){
 
         System.out.println(getMinY());
-        if(getMinY() >= 540 || getMinY() <= 0) return false;
+        if(getMinY() >= 630 || getMinY() <= 0) return false;
 
         return listOfRectangles
                 .stream()

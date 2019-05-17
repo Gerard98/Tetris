@@ -23,6 +23,7 @@ public class Square extends Figure{
                 Rectangle rectangle = new Rectangle(30,30,img);
                 rectangle.setLayoutX((5+i)*30); // i = 0   i =1  i = 2
                 rectangle.setLayoutY(j*30);   // X = 5 Y = 0 X =6 Y = 1
+                rectangle.setVisible(false);
                 listOfRectangles.add(rectangle);
             }
         }
