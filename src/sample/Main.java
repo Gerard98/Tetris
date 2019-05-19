@@ -19,19 +19,19 @@ public class Main extends Application {
 
         Controller controller = loader.getController();
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
-            if (KeyCode.D == event.getCode() && controller.getPlayerIsPlaying()) {
+            if (KeyCode.D == event.getCode() && !controller.getStop()) {
                 controller.userUseD();
             }
-            if (KeyCode.A == event.getCode() && controller.getPlayerIsPlaying()) {
+            if (KeyCode.A == event.getCode() && !controller.getStop()) {
                 controller.userUseA();
             }
-            if(KeyCode.S == event.getCode() && controller.getPlayerIsPlaying()){
+            if(KeyCode.S == event.getCode() && !controller.getStop()){
                 if(controller.getFigure().getMaxY() <= 570 && controller.getFigure().getMinY() >= 60){
                     controller.userUseS();
                 }
 
             }
-            if(KeyCode.W == event.getCode() && controller.getPlayerIsPlaying()){
+            if(KeyCode.W == event.getCode() && !controller.getStop()){
                 controller.getFigure().rotateFigure(controller.getGameBoard());
                 if(controller.getMinY() < 60){
                     controller.getFigure().getListOfRectangles().forEach(m -> {

@@ -9,7 +9,7 @@
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <Pane fx:id="gamePane" layoutX="50.0" layoutY="190.0" prefHeight="660.0" prefWidth="300.0" />
-      <Button layoutX="488.0" layoutY="126.0" mnemonicParsing="false" onAction="#reset" text="Reset" />
+      <Button fx:id="resetButton" layoutX="488.0" layoutY="126.0" mnemonicParsing="false" onAction="#reset" text="Reset" visible="false" />
       <Button fx:id="stopButton" layoutX="430.0" layoutY="126.0" mnemonicParsing="false" onAction="#stop" text="Stop" visible="false" />
       <Label layoutX="14.0" layoutY="130.0" text="Points:" />
       <Label fx:id="pointsLabel" layoutX="99.0" layoutY="130.0" text="0" />

@@ -30,8 +30,6 @@ public class Figure {
         });
     }
 
-
-
     public void printGameBoard(int[][] gameBoard){
         for(int i=0;i<7;i++){
             for(int j=0;j<GAME_BOARD_WIDTH;j++){
@@ -211,12 +209,6 @@ public class Figure {
         return gameBoard[y+1][x] == 0;
     }
 
-    public void figureChangedPositionInQuene(){
-        listOfRectangles.forEach(m -> {
-            m.setLayoutY(m.getLayoutY() - 70);
-        });
-    }
-
     public double getNEXT_FIGURE_PANE_WIDTH() {
         return NEXT_FIGURE_PANE_WIDTH;
     }
@@ -224,7 +216,7 @@ public class Figure {
     public void setLayoutForGamePane(){
         listOfRectangles.forEach(m -> {
             double paragraph = m.getLayoutX()%30;
-            m.relocate(m.getLayoutX()-paragraph + 90, m.getLayoutY());
+            m.relocate(m.getLayoutX()-paragraph + 90, m.getLayoutY()+30);
             m.setVisible(false);
         });
     }

@@ -20,7 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Controller {
 
     private Figure figure;
-    private Boolean playerIsPlaying;
     private int[][] gameBoard;
     private boolean stop = false;
     private boolean firstStart = true;
@@ -39,7 +38,7 @@ public class Controller {
     private Timeline timeline;
 
     @FXML
-    private Button startButton,stopButton;
+    private Button startButton,stopButton,resetButton;
 
     @FXML
     private Label pointsLabel, lanesLabel,lvlLabel;
@@ -58,35 +57,27 @@ public class Controller {
         if(firstStart) {
             gameBoard = new int[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
 
-            playerIsPlaying = true;
             refreshLabels();
 
+            Figure randomFigure;
             queneOfFigures = new LinkedList<>();
-            Figure randomFigure = RandomFigure.getRandomFigure(1);
-            Figure randomFigure2 = RandomFigure.getRandomFigure(2);
-            Figure randomFigure3 = RandomFigure.getRandomFigure(3);
+            for(int i=1;i<4;i++){
+                randomFigure = RandomFigure.getRandomFigure(i);
+                queneOfFigures.add(randomFigure);
+                nextFigurePane.getChildren().addAll(randomFigure.getListOfRectangles());
 
-            queneOfFigures.add(randomFigure);
-            queneOfFigures.add(randomFigure2);
-            queneOfFigures.add(randomFigure3);
+            }
 
-            nextFigurePane.getChildren().addAll(randomFigure.getListOfRectangles());
-            nextFigurePane.getChildren().addAll(randomFigure2.getListOfRectangles());
-            nextFigurePane.getChildren().addAll(randomFigure3.getListOfRectangles());
-
-            Figure firstFigure = RandomFigure.getRandomFigure(1);
-            firstFigure.setLayoutForGamePane();
-            gamePane.getChildren().addAll(firstFigure.getListOfRectangles());
-            figure = firstFigure;
+            newFigure();
 
             stopButton.setVisible(true);
+            resetButton.setVisible(true);
             startButton.setVisible(false);
             firstStart = false;
             newTimeline();
         }
         if(stop){
             stop = false;
-            playerIsPlaying = true;
             gamePane.getChildren().forEach(m -> m.setVisible(true));
             nextFigurePane.getChildren().forEach(m -> m.setVisible(true));
             startButton.setVisible(false);
@@ -105,9 +96,10 @@ public class Controller {
         points = 0;
         lanesDeleted = 0;
         refreshLabels();
+        stopButton.setVisible(false);
+        resetButton.setVisible(false);
         firstStart = true;
         startButton.setVisible(true);
-        playerIsPlaying = true;
 
     }
 
@@ -118,7 +110,6 @@ public class Controller {
 
     public void endGame(){
         System.out.println("Koniec gry");
-        playerIsPlaying = false;
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("You lose!");
@@ -130,7 +121,6 @@ public class Controller {
     public void stop(){
         if(!stop){
             timeline.stop();
-            playerIsPlaying = false;
             stop =true;
             gamePane.getChildren().forEach(m -> m.setVisible(false));
             nextFigurePane.getChildren().forEach(m -> m.setVisible(false));
@@ -277,7 +267,7 @@ public class Controller {
                         if(m.getLayoutY() >= 30) m.setVisible(true);
                     });
                 }
-                if(playerIsPlaying){
+                if(!stop){
                     figure.setLayoutY(deltaY);
                 }
 
@@ -331,10 +321,6 @@ public class Controller {
         });
     }
 
-    public Boolean getPlayerIsPlaying(){
-        return playerIsPlaying;
-    }
-
     public Figure getFigure(){
         return figure;
     }
@@ -343,5 +329,7 @@ public class Controller {
         return gameBoard;
     }
 
-
+    public boolean getStop(){
+        return stop;
+    }
 }
