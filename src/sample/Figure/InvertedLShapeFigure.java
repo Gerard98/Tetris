@@ -51,7 +51,42 @@ public class InvertedLShapeFigure extends Figure{
         setListOfRectangles(listOfRectangles);
     }
 
+    public InvertedLShapeFigure(int maxY){
+        ImagePattern img = RandomColor.getRandomColor();
+        List<Node> listOfRectangles = new LinkedList<>();
+        double paragraph = (getNEXT_FIGURE_PANE_WIDTH() - 90)/2;
+        for(int i=0;i<3;i++){
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(paragraph+30*i);
+            rectangle.setLayoutY(maxY+30);
+            listOfRectangles.add(rectangle);
+        }
 
+        Rectangle rectangle = new Rectangle(30,30,img);
+        rectangle.setLayoutX(paragraph);
+        rectangle.setLayoutY(maxY);
+        listOfRectangles.add(rectangle);
+
+
+        setListOfRectangles(listOfRectangles);
+    }
+    /*
+    @Override
+    public void setLayoutForGamePane(){
+        Node node;
+        for(int i=0;i<3;i++){
+            node = getListOfRectangles().get(i);
+            node.setLayoutX(60+30*i);
+            node.setLayoutY(30);
+            node.setVisible(false);
+        }
+        node = getListOfRectangles().get(3);
+        node.setLayoutX(60);
+        node.setLayoutY(0);
+        node.setVisible(false);
+
+    }
+    */
     @Override
     public void rotateFigure(int[][] gameBoard) {
         Node node = getListOfRectangles().get(1);

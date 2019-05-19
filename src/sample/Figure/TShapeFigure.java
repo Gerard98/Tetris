@@ -53,6 +53,25 @@ public class TShapeFigure extends Figure {
 
 
 
+    public TShapeFigure(int maxY){
+        ImagePattern img = RandomColor.getRandomColor();
+        double paragraph = (getNEXT_FIGURE_PANE_WIDTH() - 90)/2;
+        List<Node> listOfRectangles = new LinkedList<>();
+        for(int i=0;i<3;i++){
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(paragraph+30*i);
+            rectangle.setLayoutY(maxY+30);
+            listOfRectangles.add(rectangle);
+        }
+
+        Rectangle rectangle = new Rectangle(30,30,img);
+        rectangle.setLayoutX(paragraph+30);
+        rectangle.setLayoutY(maxY);
+        listOfRectangles.add(rectangle);
+
+        setListOfRectangles(listOfRectangles);
+    }
+
     @Override
     public void rotateFigure(int[][] gameBoard) {
         Node node;

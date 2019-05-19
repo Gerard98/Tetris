@@ -39,6 +39,21 @@ public class Lane extends Figure {
         }
 
         setListOfRectangles(listOfRectangles);
+    }
+
+    public Lane(int maxY){
+        ImagePattern img = RandomColor.getRandomColor();
+        List<Node> listOfRectangles = new LinkedList<>();
+        double paragraph = (getNEXT_FIGURE_PANE_WIDTH() - 120)/2;
+        for(int i=0;i<4;i++){
+
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(i*30 + paragraph);
+            rectangle.setLayoutY(maxY);
+            listOfRectangles.add(rectangle);
+        }
+
+        setListOfRectangles(listOfRectangles);
 
     }
 

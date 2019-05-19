@@ -47,7 +47,7 @@ public class Main extends Application {
         });
 
 
-        Scene scene = new Scene(root,400,900);
+        Scene scene = new Scene(root,560,900);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

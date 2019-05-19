@@ -47,6 +47,26 @@ public class InvertedZShapeFigure extends Figure{
         setListOfRectangles(listOfRectangles);
     }
 
+    public InvertedZShapeFigure(int maxY){
+        ImagePattern img = RandomColor.getRandomColor();
+        List<Node> listOfRectangles = new LinkedList<>();
+        double paragraph = (getNEXT_FIGURE_PANE_WIDTH() - 90)/2;
+        for(int i=0;i<2;i++){
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(paragraph+30+30*i);
+            rectangle.setLayoutY(maxY);
+            listOfRectangles.add(rectangle);
+        }
+
+        for(int i=0;i<2;i++){
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(paragraph+30*i);
+            rectangle.setLayoutY(maxY+ 30);
+            listOfRectangles.add(rectangle);
+        }
+
+        setListOfRectangles(listOfRectangles);
+    }
 
 
     @Override

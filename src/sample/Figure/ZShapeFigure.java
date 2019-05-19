@@ -48,6 +48,27 @@ public class ZShapeFigure extends Figure {
 
 
 
+    public ZShapeFigure(int maxY){
+        ImagePattern img = RandomColor.getRandomColor();
+        double paragraph = (getNEXT_FIGURE_PANE_WIDTH() - 90)/2;
+        List<Node> listOfRectangles = new LinkedList<>();
+        for(int i=0;i<2;i++){
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(paragraph+30*i);
+            rectangle.setLayoutY(maxY);
+            listOfRectangles.add(rectangle);
+        }
+
+        for(int i=0;i<2;i++){
+            Rectangle rectangle = new Rectangle(30,30,img);
+            rectangle.setLayoutX(paragraph+30+30*i);
+            rectangle.setLayoutY(maxY+30);
+            listOfRectangles.add(rectangle);
+        }
+
+        setListOfRectangles(listOfRectangles);
+    }
+
     @Override
     public void rotateFigure(int[][] gameBoard) {
         Node node;

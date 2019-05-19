@@ -7,16 +7,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import sample.Figure.*;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Controller {
@@ -25,17 +23,23 @@ public class Controller {
     private Boolean playerIsPlaying;
     private int[][] gameBoard;
     private boolean stop = false;
+    private boolean firstStart = true;
     private int lvl = 1;
     private int points = 0;
     private int lanesDeleted = 0;
+
+    private Queue<Figure> queneOfFigures;
 
     private final int GAME_BOARD_WIDTH = 10;
     private final int GAME_BOARD_HEIGHT = 22;
 
 
     @FXML
-    private Pane pane,gamePane;
+    private Pane pane,gamePane,nextFigurePane;
     private Timeline timeline;
+
+    @FXML
+    private Button startButton,stopButton;
 
     @FXML
     private Label pointsLabel, lanesLabel,lvlLabel;
@@ -46,14 +50,48 @@ public class Controller {
         Image image = new Image("sample/Images/GamePane.png");
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         gamePane.setBackground(new Background(backgroundImage));
-        gameBoard = new int[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
+        nextFigurePane.setStyle("-fx-background-color: black");
+    }
 
-        playerIsPlaying = true;
-        //gamePane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        refreshLabels();
-        newFigure();
-        newTimeline();
+    @FXML
+    public void start(){
+        if(firstStart) {
+            gameBoard = new int[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
 
+            playerIsPlaying = true;
+            refreshLabels();
+
+            queneOfFigures = new LinkedList<>();
+            Figure randomFigure = RandomFigure.getRandomFigure(1);
+            Figure randomFigure2 = RandomFigure.getRandomFigure(2);
+            Figure randomFigure3 = RandomFigure.getRandomFigure(3);
+
+            queneOfFigures.add(randomFigure);
+            queneOfFigures.add(randomFigure2);
+            queneOfFigures.add(randomFigure3);
+
+            nextFigurePane.getChildren().addAll(randomFigure.getListOfRectangles());
+            nextFigurePane.getChildren().addAll(randomFigure2.getListOfRectangles());
+            nextFigurePane.getChildren().addAll(randomFigure3.getListOfRectangles());
+
+            Figure firstFigure = RandomFigure.getRandomFigure(1);
+            firstFigure.setLayoutForGamePane();
+            gamePane.getChildren().addAll(firstFigure.getListOfRectangles());
+            figure = firstFigure;
+
+            stopButton.setVisible(true);
+            startButton.setVisible(false);
+            firstStart = false;
+            newTimeline();
+        }
+        if(stop){
+            stop = false;
+            playerIsPlaying = true;
+            gamePane.getChildren().forEach(m -> m.setVisible(true));
+            nextFigurePane.getChildren().forEach(m -> m.setVisible(true));
+            startButton.setVisible(false);
+            timeline.play();
+        }
     }
 
     @FXML
@@ -67,15 +105,15 @@ public class Controller {
         points = 0;
         lanesDeleted = 0;
         refreshLabels();
+        firstStart = true;
+        startButton.setVisible(true);
         playerIsPlaying = true;
-        newFigure();
-        newTimeline();
-
 
     }
 
     public void deleteFill(){
         gamePane.getChildren().clear();
+        nextFigurePane.getChildren().clear();
     }
 
     public void endGame(){
@@ -92,22 +130,31 @@ public class Controller {
     public void stop(){
         if(!stop){
             timeline.stop();
+            playerIsPlaying = false;
             stop =true;
-        }
-        else {
-            timeline.play();
-            stop = false;
+            gamePane.getChildren().forEach(m -> m.setVisible(false));
+            nextFigurePane.getChildren().forEach(m -> m.setVisible(false));
+            startButton.setVisible(true);
         }
     }
 
+
     public void newFigure(){
 
-        //Figure figure = RandomFigure.getRandomFigure();
-        Figure figure = new Lane();
+        Figure figure = RandomFigure.getRandomFigure(3);
+        Figure newFigure = queneOfFigures.poll();
 
-        gamePane.getChildren().addAll(figure.getListOfRectangles());
+        queneOfFigures.add(figure);
 
-        this.figure = figure;
+        nextFigurePane.getChildren().forEach(m -> {
+                m.relocate(m.getLayoutX(), m.getLayoutY()-90);
+        });
+        newFigure.setLayoutForGamePane();
+        nextFigurePane.getChildren().removeAll(newFigure.getListOfRectangles());
+        nextFigurePane.getChildren().addAll(figure.getListOfRectangles());
+        gamePane.getChildren().addAll(newFigure.getListOfRectangles());
+
+        this.figure = newFigure;
 
     }
 
@@ -222,7 +269,6 @@ public class Controller {
                         newFigure();
                         timeline.stop();
                         newTimeline();
-                        //timeline.playFromStart();
                     }
                 }
 

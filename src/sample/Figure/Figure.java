@@ -12,6 +12,8 @@ public class Figure {
     private final int GAME_BOARD_WIDTH = 10;
     private final int GAME_BOARD_HEIGHT = 22;
 
+    private final double NEXT_FIGURE_PANE_WIDTH = 140;
+
     private List<Node> listOfRectangles;
 
     public List<Node> getListOfRectangles() {
@@ -27,6 +29,8 @@ public class Figure {
             m.setLayoutY(m.getLayoutY() + deltaY);
         });
     }
+
+
 
     public void printGameBoard(int[][] gameBoard){
         for(int i=0;i<7;i++){
@@ -207,6 +211,21 @@ public class Figure {
         return gameBoard[y+1][x] == 0;
     }
 
+    public void figureChangedPositionInQuene(){
+        listOfRectangles.forEach(m -> {
+            m.setLayoutY(m.getLayoutY() - 70);
+        });
+    }
 
+    public double getNEXT_FIGURE_PANE_WIDTH() {
+        return NEXT_FIGURE_PANE_WIDTH;
+    }
 
+    public void setLayoutForGamePane(){
+        listOfRectangles.forEach(m -> {
+            double paragraph = m.getLayoutX()%30;
+            m.relocate(m.getLayoutX()-paragraph + 90, m.getLayoutY());
+            m.setVisible(false);
+        });
+    }
 }
